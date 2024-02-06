@@ -1,0 +1,93 @@
+[ T i t l e ]
+Model for Timepix
+
+[ P a r a m e t e r s ]
+ icntl    =           0     # 0: simulation  8: geometry
+ maxcas   =        10000     # number of particles per one batch
+ maxbch   =           1     # number of batches
+ e-mode   =           2     # Normal, 1: Event generator mode
+ negs     =           1     # =-1:original, =0:No, =1:EGS
+
+[ S o u r c e ]
+   s-type =   13          # Gaussian space distribution
+     proj =   proton     # particle type
+   e-type =   2          # Gaussian energy distribution
+      eg0 =   33.0       # energy [MeV/u]
+      eg1 =   0.5        # energy FWHM [Mev/u]
+      eg2 =   30.0       # min cutoff
+      eg3 =   36.0       # max cutoff
+       x0 =   0.0        # x beam position [cm]
+       y0 =   0.0        # y beam position [cm]
+       r1 =   2.0        # space FWHM [cm]
+       z0 =  -40.0       # z beam start position [cm]
+       z1 =  -40.0       # z beam end position [cm]
+      dir =   data       # z-direction [cosine], a-type: data
+   a-type = 11
+       na = 10           # number of data bins
+  0.0 0.7979 0.2 0.7365 0.4 0.5794 0.6 0.3884 0.8 0.2218 1.0 0.1080 1.2 0.0448 1.4 0.0158 1.6 0.0048 1.8 0.0012 2.0
+
+$   a-type =   15         # angular distribution
+$     g(x) =   1/(sqrt(2*pi*1.0))*exp(-(x-0.0)/(2*1.0))
+$     g(x) =   1.0
+$       nn =   100
+$      ag1 =  -1.2339     # min cutoff
+$      ag2 =   1.2339     # max cutoff
+$      ag1 =  -15     # min cutoff
+$      ag2 =   15     # max cutoff
+
+[ M a t e r i a l ]
+mat[1]    N 8  O 2       # air composition
+mat[2]    Ta 1           # ta foil
+mat[3]    Si 1           # timepix detector element
+
+[ M a t N a m e C o l o r ]
+  mat  name     color
+  1    Air      pastelcyan
+  2    Ta-foil  orangeyellow
+  3    Timepix  darkred
+  
+[ S u r f a c e ]
+  10  so     500.0
+  11  so     50.0
+  12  cz     5.0
+  13  pz     0.0
+  14  pz     0.086
+  15  rpp    -0.05 0.05 -0.705 0.705 -0.705 0.705
+
+[ C e l l ]
+ 100    0           -10 #102 #103 #104
+ 101   -1            10 #103 #104
+ 102    1 -0.0012   -11 #103 #104
+ 103    2 -16.69    -12 13 -14
+ 104    3 -2.329    -15 trcl=1
+
+[ T r a n s f o r m ]
+  *tr1 -10 0 10   0 0 0   2 45  0 0  0 0 3
+
+[ T - D e p o s i t ]off  # dopisat
+
+[ T - T r a c k ]           # Placeholder
+    title = Track Detection using [T-track] tally
+     mesh =  xyz            # mesh type is xyz scoring mesh
+   x-type =    2            # x-mesh is linear given by xmin, xmax and nx
+     xmin =  -15.0          # minimum value of x-mesh points -15.0
+     xmax =   10.0          # maximum value of x-mesh points  10.0
+       nx =  200            # number of x-mesh points
+   y-type =    1            # y-mesh is given by the below data
+       ny =    1            # number of y-mesh points
+         -5.0  5.0
+   z-type =    2            # z-mesh is linear given by zmin, zmax and nz
+     zmin =  -10.0          # minimum value of z-mesh points -10.0
+     zmax =   20.0          # maximum value of z-mesh points  20.0
+       nz =  200            # number of z-mesh points
+     part =  all
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+            0.0  10000.0
+     unit =    1            # unit is [1/cm^2/source]
+     axis =   xz            # axis of output
+     file = xz_track.out    # file name of output for the above axis
+    gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   epsout =    1            # (D=0) generate eps file by ANGEL
+
+[ E n d ]

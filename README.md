@@ -9,4 +9,4 @@ Monte Carlo model (PHITS) of proton beam output of cyclotron U-120M in Řež, Cz
 
 Variables "cXX" can be used to quickly change detector position, size and Ta-foil thickness. 
 
-[Forced Collisions] are used to improve chances of deflected particles interaction. 
+[Forced Collisions] are used to improve chances of deflected particles interactions. 

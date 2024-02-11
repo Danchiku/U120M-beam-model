@@ -7,7 +7,7 @@ set: c02[10]     $ Z[cm] offset of TPX3
 set: c03[45]     $ rotation around Y [degrees] of TPX3
 
 set: c04[0.705]  $ half of TPX3 size [cm]
-set: c05[0.05]   $ half of TPX3 thickness [cm]
+set: c05[0.025]  $ half of TPX3 thickness [cm]
 set: c06[256]    $ number of pixels in matrix (X*X) of TPX3
 set: c07[0.086]  $ thickness of Ta-foil [cm]
 
@@ -17,7 +17,7 @@ set: c10[2.329]  $ density of Si [g/cm^3]
 
 [ P a r a m e t e r s ]
  icntl    =           0     # 0: simulation  8: geometry
- maxcas   =           1e6   # number of particles; 1e5 cca 30s, 1e6 cca 5min, 1e7 cca 1h
+ maxcas   =           1e7   # number of particles; 1e5 cca 30s, 1e6 cca 3min, 1e7 cca 30min
  maxbch   =           1     # number of batches
  e-mode   =           2     # Normal, 1: Event generator mode
  negs     =           1     # =-1:original, =0:No, =1:EGS
@@ -27,7 +27,7 @@ set: c10[2.329]  $ density of Si [g/cm^3]
      proj =   proton     # particle type
    e-type =   2          # Gaussian energy distribution
       eg0 =   33.0       # energy [MeV/u]
-      eg1 =   0.5        # energy FWHM [Mev/u]
+      eg1 =   0.5        # energy FWHM [MeV/u]
       eg2 =   30.0       # min cutoff
       eg3 =   36.0       # max cutoff
        x0 =   0.0        # x beam position [cm]
@@ -36,8 +36,8 @@ set: c10[2.329]  $ density of Si [g/cm^3]
        z0 =  -40.0       # z beam start position [cm]
        z1 =  -40.0       # z beam end position [cm]
       dir =   data
-   a-type = 11           # aglular distribution
-       na = 10           # number of data bins
+   a-type =   11         # aglular distribution
+       na =   10         # number of data bins
   0.0 0.7979 0.2 0.7365 0.4 0.5794 0.6 0.3884 0.8 0.2218 1.0 0.1080 1.2 0.0448 1.4 0.0158 1.6 0.0048 1.8 0.0012 2.0
 
 [ M a t e r i a l ]
@@ -58,25 +58,31 @@ mat[3]    Si 1           # timepix detector element
   13  pz     0.0
   14  pz     c07
   15  rpp    -1*c05 c05 -1*c04 c04 -1*c04 c04
+  16  cz     5.0
+  17  pz     8.5
+  18  pz     50.0
 
 [ C e l l ]
- 100    0           -10 #102 #103 #104
- 101   -1            10 #103 #104
- 102    1 -1*c08    -11 #103 #104
+ 100    0           -10 #102 #103 #104 #105
+ 101   -1            10 #103 #104 #105
+ 102    1 -1*c08    -11 #103 #104 #105
  103    2 -1*c09    -12 13 -14
  104    3 -1*c10    -15 trcl=1
+ 105    1 -1*c08    -16 17 -18
 
 [ T r a n s f o r m ]
   *tr1 c01 0 c02   0 0 0   2 c03     0 0    0 0 3   # TPX3
   *tr2 c01 0 c02   0 0 0   2 -1*c03  0 0    0 0 3   # T-Track
-  *tr3 c01 0 c02   0 0 0   1 90      2 -45  0 0 3   # T-Deposit
+  *tr3 c01 0 c02   0 0 0   1 90      2 -45  0 0 3   # T-Deposit, T-LET
 
-[ I m p o r t a n c e ]off
+[ I m p o r t a n c e ]
      part = all
       reg    imp
-      104    10.0
+      105    0.0
+	  104    10.0
 
 [ F o r c e d C o l l i s i o n s ]
+     part = all
       reg    fcl
       104    1.0
 
@@ -100,9 +106,34 @@ mat[3]    Si 1           # timepix detector element
      axis =    xz           # axis of output
      trcl =    3
      file = deposit_TPX3.out    # file name
-     part =    all
+     part =    all proton alpha (electron positron)    # p4-group = e-/+
     gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
    epsout =    1            # (D=0) generate eps file by ANGEL
+
+[ T - L E T ] # fitted on detector
+    title = LET in TPX3
+     mesh = xyz             # mesh type
+   x-type =    2            # x-mesh linear
+     xmin =   -1*c04
+     xmax =    c04
+       nx =    c06
+   y-type =    1            # y-mesh data
+       ny =    1
+       -1*c05 c05
+   z-type =    2            # z-mesh linear
+     zmin =   -1*c04
+     zmax =    c04
+       nz =    c06
+   l-type =    3            # l-mesh is log given by lmin, lmax and nl
+     lmin =    1.0e-04      # minimum value of l-mesh points
+     lmax =    1.0e04       # maximum value of l-mesh points
+       nl =    4            # number of l-mesh points
+     unit =    6            # unit is L*d(L) [keV/um]
+     axis =    xz           # axis of output
+     trcl =    3
+     file = let_TPX3.out  # file name
+     part =    all      
+   epsout =    1
 
 [ T - T r a c k ]
     title = T-Track overview

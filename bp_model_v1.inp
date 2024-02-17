@@ -5,36 +5,50 @@ $ VARIABLES
 set: c01[-10]    $ X[cm] offset of TPX3
 set: c02[10]     $ Z[cm] offset of TPX3
 set: c03[45]     $ rotation around Y [degrees] of TPX3
+set: c15[-3]     $ Y[cm] offset of TPX3 for track distinguishion
 
 set: c04[0.705]  $ half of TPX3 size [cm]
 set: c05[0.025]  $ half of TPX3 thickness [cm]
 set: c06[256]    $ number of pixels in matrix (X*X) of TPX3
 set: c07[0.086]  $ thickness of Ta-foil [cm]
+set: c16[0.2]    $ thickness of Al cover plate [cm]
+set: c17[0.0]    $ cover and detector overlap [cm]
 
 set: c08[0.0012] $ density of air [g/cm^3]
 set: c09[16.69]  $ density of Ta [g/cm^3]
 set: c10[2.329]  $ density of Si [g/cm^3]
 
+set: c11[0.02]   $ thickness of Al beam degrader [cm]
+set: c12[-40.0]  $ nozzle position [cm]
+set: c13[2.7]    $ density of Al [g/cm^3]
+
+set: c14[37.0]   $ mean proton energy [MeV], 33 or 37
+$ ---------
+
 [ P a r a m e t e r s ]
  icntl    =           0     # 0: simulation  8: geometry
- maxcas   =           1e7   # number of particles; 1e5 cca 30s, 1e6 cca 3min, 1e7 cca 30min
+ maxcas   =           1e7   # number of particles; 1e5 cca 30s, 1e6 cca 4min, 1e7 cca 45min
  maxbch   =           1     # number of batches
  e-mode   =           2     # Normal, 1: Event generator mode
  negs     =           1     # =-1:original, =0:No, =1:EGS
+ emin(12) =           1e-03 # needed for track structure mode
+ emin(13) =           1e-03
+ etsmax   =           1e-2
+ etsmin   =           1e-6
 
 [ S o u r c e ]
    s-type =   13         # Gaussian space distribution
      proj =   proton     # particle type
    e-type =   2          # Gaussian energy distribution
-      eg0 =   33.0       # energy [MeV/u]
+      eg0 =   c14
       eg1 =   0.5        # energy FWHM [MeV/u]
-      eg2 =   30.0       # min cutoff
-      eg3 =   36.0       # max cutoff
+      eg2 =   c14-3      # min cutoff
+      eg3 =   c14+3      # max cutoff
        x0 =   0.0        # x beam position [cm]
        y0 =   0.0        # y beam position [cm]
        r1 =   2.0        # space FWHM [cm]
-       z0 =  -40.0       # z beam start position [cm]
-       z1 =  -40.0       # z beam end position [cm]
+       z0 =   c12        # z beam start position [cm]
+       z1 =   c12        # z beam end position [cm]
       dir =   data
    a-type =   11         # aglular distribution
        na =   10         # number of data bins
@@ -42,51 +56,65 @@ set: c10[2.329]  $ density of Si [g/cm^3]
 
 [ M a t e r i a l ]
 mat[1]    N 8  O 2       # air composition
-mat[2]    Ta 1           # ta foil
-mat[3]    Si 1           # timepix detector element
+mat[2]    Ta 1           # Ta foil
+mat[3]    Si 1           # TPX3 detector element
+mat[4]    Al 1           # beam degrader
+mat[5]    Al 1           # TPX3 cover
 
 [ M a t N a m e C o l o r ]
-  mat  name     color
-  1    Air      pastelcyan
-  2    Ta-foil  orangeyellow
-  3    TPX3     darkred
+  mat  name      color
+  1    Air       pastelcyan
+  2    Ta-foil   orangeyellow
+  3    TPX3      darkred
+  4    Degrader  gray
+  5    Cover     black
   
 [ S u r f a c e ]
   10  so     500.0
   11  so     50.0
-  12  cz     5.0
+  12  cz     2.5
   13  pz     0.0
   14  pz     c07
   15  rpp    -1*c05 c05 -1*c04 c04 -1*c04 c04
   16  cz     5.0
   17  pz     8.5
   18  pz     50.0
+  19  cz     5.0
+  20  pz     c12+1
+  21  pz     c12+1+c11
+  22  rpp    0.2 0.2+c16 -1*c04 c04 -3*c04+c17 -1*c04+c17
 
 [ C e l l ]
- 100    0           -10 #102 #103 #104 #105
- 101   -1            10 #103 #104 #105
- 102    1 -1*c08    -11 #103 #104 #105
+ 100    0           -10 #102 #103 #104 #105 #106
+ 101   -1            10 #103 #104 #105 #106
+ 102    1 -1*c08    -11 #103 #104 #105 #106
  103    2 -1*c09    -12 13 -14
  104    3 -1*c10    -15 trcl=1
  105    1 -1*c08    -16 17 -18
+ 106    4 -1*c13    -19 20 -21
+ 107    5 -1*c13    -22 trcl=1
 
 [ T r a n s f o r m ]
-  *tr1 c01 0 c02   0 0 0   2 c03     0 0    0 0 3   # TPX3
-  *tr2 c01 0 c02   0 0 0   2 -1*c03  0 0    0 0 3   # T-Track
-  *tr3 c01 0 c02   0 0 0   1 90      2 -45  0 0 3   # T-Deposit, T-LET
+  *tr1 c01 c15 c02   0 0 0   2 c03     0 0    0 0 3   # TPX3, cover
+  *tr2 c01 c15 c02   0 0 0   2 -1*c03  0 0    0 0 3   # T-Track
+  *tr3 c01 c15 c02   0 0 0   1 90      2 -45  0 0 3   # T-Deposit, T-LET
 
 [ I m p o r t a n c e ]
      part = all
       reg    imp
       105    0.0
-	  104    10.0
+      104    10.0
 
 [ F o r c e d C o l l i s i o n s ]
      part = all
       reg    fcl
       104    1.0
 
-[ T - D e p o s i t ] # fitted on detector
+[ T r a c k S t r u c t u r e ]off
+      reg    mID
+      104    -1
+
+[ T - D e p o s i t ]
     title = Energy deposition in TPX3
      mesh =    xyz          # mesh type
    x-type =    2            # x-mesh linear
@@ -108,9 +136,10 @@ mat[3]    Si 1           # timepix detector element
      file = deposit_TPX3.out    # file name
      part =    all proton alpha (electron positron)    # p4-group = e-/+
     gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   vtkout =    1
    epsout =    1            # (D=0) generate eps file by ANGEL
 
-[ T - L E T ] # fitted on detector
+[ T - L E T ]
     title = LET in TPX3
      mesh = xyz             # mesh type
    x-type =    2            # x-mesh linear
@@ -157,6 +186,7 @@ mat[3]    Si 1           # timepix detector element
      axis =    xz           # axis of output
      file = xz_track_all.out    # file name
     gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   vtkout =    1
    epsout =    1            # (D=0) generate eps file by ANGEL
 
 [ T - T r a c k ]
@@ -181,6 +211,30 @@ mat[3]    Si 1           # timepix detector element
      axis =    xy           # axis of output
      trcl =    2
      file = xy_track_TPX3.out    # file name
+    gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   epsout =    1            # (D=0) generate eps file by ANGEL
+
+[ T - T r a c k ]
+    title = Energy spectrum in front of the foil
+     mesh =    xyz          # mesh type
+   x-type =    2            # x-mesh linear
+     xmin =   -2.5
+     xmax =    2.5
+       nx =    100          # number of x-mesh points
+   y-type =    2            # z-mesh linear
+     ymin =   -2.5
+     ymax =    2.5
+       ny =    100          # number of z-mesh points
+   z-type =    1            # y-mesh data
+       nz =    1            # number of y-mesh points
+       -1.0 0.0
+     part =    all
+   e-type =    1            # e-mesh data
+       ne =    1            # number of e-mesh points
+        0.0  10000.0
+     unit =    2            # unit [1/cm^2/MeV/source]
+     axis =    xy           # axis of output
+     file = xy_track_en_spectrum.out    # file name
     gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
    epsout =    1            # (D=0) generate eps file by ANGEL
 

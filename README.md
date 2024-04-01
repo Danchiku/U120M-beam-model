@@ -20,4 +20,7 @@ Aluminium walls around the detector element simulate detector cover. Above the d
 `[Forced Collisions]` are to improve chances of deflected particles interactions. `[Importance]` is for neglect of residual beam behind the Ta-foil that will no longer be useful, also it is for run time optimalization. 
 
 ## Simulation output
-*graphs will be provided*
+*graphs will be provided - work in progress*
+
+
+![Flux in xz plane](https://github.com/Danchiku/U120M-beam-model/blob/main/simulation_output/flux_all.pdf)

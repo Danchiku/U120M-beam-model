@@ -23,4 +23,4 @@ Aluminium walls around the detector element simulate detector cover. Above the d
 *graphs will be provided - work in progress*
 
 
-![Flux in xz plane](https://github.com/Danchiku/U120M-beam-model/blob/main/simulation_output/flux_all.pdf)
+![Flux in xz plane](https://github.com/Danchiku/U120M-beam-model/blob/main/simulation_output/flux_all.png)

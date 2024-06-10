@@ -11,6 +11,8 @@ File `bp_model_v1.inp` is the old version of experiment conducted by C. Granja a
 - $Si$ detection element of [MiniPix TPX3](https://advacam.com/camera/minipix-tpx3/) detector $141$ cm perpendicularly to the beam, $141$ cm parallel to the foil ($200$ cm from scatter foil), perpendicularly to scattered paticles and angled at $60$ degrees to the ceiling. 
 
 ## Simulation
+`$OMP=0` is a command for turning on parallel computing using *OpenMP* with all available processing cores (if you aren't using parallelization then just delete the line). 
+
 Variables `cXX` can be used to quickly change detection element position, size, resolution and Ta-foil thickness. 
 
 Aluminium walls around the detector element simulate detector cover. Above the detector element is $0.001$ mm thick $Al$ entrance window and bellow is $0.85$ thick $Si$ ASCI chip with $0.025$ mm air gap. Detector has agle of $60$ degrees to ceiling so that, based on the agles of trajectories, origin of scatter events can be determined. 

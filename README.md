@@ -15,7 +15,7 @@ File `bp_model_v1.inp` is the old version of experiment conducted by C. Granja a
 
 Variables `cXX` can be used to quickly change detection element position, size, resolution and Ta-foil thickness. 
 
-Aluminium walls around the detector element simulate detector cover. Above the detector element is $0.001$ mm thick $Al$ entrance window and bellow is $0.85$ thick $Si$ ASCI chip with $0.025$ mm air gap. Detector has agle of $60$ degrees to ceiling so that, based on the agles of trajectories, origin of scatter events can be determined. 
+Aluminium walls around the detector element simulate detector cover. Above the detector element is $0.001$ mm thick $Al$ entrance window and bellow is $0.85$ thick $Si$ ASIC chip with $0.025$ mm air gap. Detector has agle of $60$ degrees to ceiling so that, based on the agles of trajectories, origin of scatter events can be determined. 
 
 `[T-Track]` (Overview) tally is for visualization of the setup and beam geometry. `[T-Track]` (TPX3) tally is to check flux on the detector (there are two addition `[T-Track]` tallies to determine flux between the detector and scatter foil). `[T-Cross]` (Energy spectrum) tally is for determinig energy specrum of the beam in front of the $Ta$ foil and the detector. Main output of the simulation is `[T-Deposit]` and `[T-LET]`, they are for displaying deposited energy $Dose$ and linear energy trasnfer $LET$ in $Si$ detection element of TPX3. 
 

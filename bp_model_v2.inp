@@ -8,15 +8,15 @@ set: c02[141]    $ Z[cm] offset of TPX3
 set: c03[45]     $ rotation around Y [degrees] of TPX3
 set: c15[60]     $ rotation up TPX3 [degrees]
 
-set: c04[0.705]  $ half of TPX3 size [cm]
+set: c04[0.704]  $ half of TPX3 size [cm]
 set: c05[0.05]   $ TPX3 thickness [cm]
 set: c06[256]    $ number of pixels in matrix (X*X) of TPX3
 set: c07[0.0100] $ thickness of Ta-foil [cm]
-set: c16[0.705]  $ half of thickness of Al box [cm]
+set: c16[0.70]   $ half of thickness of Al box [cm]
 set: c17[1.05]   $ half of Al box size [cm]
-set: c19[0.74]   $ half of Al inside [cm]
+set: c19[0.85]   $ half of Al inside [cm]
 set: c20[0.0001] $ cover plate TPX3 [cm]
-set: c21[0.085]  $ ASCI chip thickness [cm]
+set: c21[0.085]  $ ASIC chip thickness [cm]
 
 set: c08[0.0012] $ density of air [g/cm^3]
 set: c09[16.69]  $ density of Ta [g/cm^3]

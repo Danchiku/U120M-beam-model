@@ -65,7 +65,7 @@ mat[2]    Ta 1           # Ta foil
 mat[3]    Si 1           # TPX3 detector element
 mat[4]    Al 1           # beam degrader
 mat[5]    Al 1           # TPX3 cover
-mat[6]    Si 1           # ASCI chip
+mat[6]    Si 1           # ASIC chip
 
 [ M a t N a m e C o l o r ]
   mat  name      color
@@ -74,7 +74,7 @@ mat[6]    Si 1           # ASCI chip
   3    TPX3      darkred
   4    Degrader  gray
   5    Cover     black
-  6    ASCI-chip orange
+  6    ASIC-chip orange
   
 [ S u r f a c e ]
   10  so     500.0
@@ -144,7 +144,7 @@ $      104    10.0
      axis =    xz           # axis of output
      trcl =    3
      file = deposit_TPX3.out    # file name
-     part =    all proton alpha (electron positron)    # p4-group = e-/+
+     part =    all proton alpha neutron (electron positron)    # p5-group = e-/+
     gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
    vtkout =    1
    epsout =    1            # (D=0) generate eps file by ANGEL
@@ -214,7 +214,7 @@ $      104    10.0
      zmin =   -2.0
      zmax =    2.0
        nz =    200          # number of z-mesh points
-     part =    all
+     part =    all proton alpha neutron (electron positron)    # p5-group = e-/+
    e-type =    1            # e-mesh data
        ne =    1            # number of e-mesh points
         0.0  10000.0

@@ -144,7 +144,7 @@ $      104    10.0
      axis =    xz           # axis of output
      trcl =    3
      file = deposit_TPX3.out    # file name
-     part =    all proton alpha (electron positron) photon    # p4-group = e-/+
+     part =    all proton alpha (electron positron)    # p4-group = e-/+
     gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
    vtkout =    1
    epsout =    1            # (D=0) generate eps file by ANGEL

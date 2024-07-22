@@ -26,17 +26,17 @@ Aluminium walls around the detector element simulate detector cover. Above the d
 These are the simulation outputs for $10^{8}$ particles and $100$ batches.  
 
 - Particle flux in $xz$ plane, at position $(0;0)$ is $Ta$ scatter foil, primary beam behind scatter foil is ignored.
-<img src="simulation_output/flux_all.png" width=75% height=75%>
+<img src="simulation_output/track_all.png" width=75% height=75%>
 
 - Proton energy spectrum $1$ cm in front of the scatter foil. 
-<img src="simulation_output/spectrum_1.png" width=75% height=75%>
+<img src="simulation_output/foil_spectrum_1.png" width=75% height=75%>
 
 - Proton energy spectrum $1$ cm behind the scatter foil. 
-<img src="simulation_output/spectrum_2.png" width=75% height=75%>
+<img src="simulation_output/foil_spectrum_2.png" width=75% height=75%>
 
 - Deposited energy in detector element. 
-<img src="simulation_output/deposit_1.png" width=75% height=75%>
+<img src="simulation_output/deposit_det.png" width=75% height=75%>
 
 - Proton energy spectrum on the detector. 
-<img src="simulation_output/spectrum_2.png" width=75% height=75%>
+<img src="simulation_output/det_spectrum.png" width=75% height=75%>
 

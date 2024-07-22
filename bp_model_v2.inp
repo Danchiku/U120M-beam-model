@@ -40,9 +40,9 @@ $ ---------
  emin(13) =           1e-03
  etsmax   =           1e-2
  etsmin   =           1e-6
-
+  
 [ S o u r c e ]
-   s-type =   13         # Gaussian space distribution
+   s-type =   1         # Gaussian space distribution
      proj =   proton     # particle type
    e-type =   2          # Gaussian energy distribution
       eg0 =   c14
@@ -51,7 +51,7 @@ $ ---------
       eg3 =   c14+3      # max cutoff
        x0 =   0.0        # x beam position [cm]
        y0 =   0.0        # y beam position [cm]
-       r1 =   1.5        # space FWHM [cm]
+       r0 =   1.5        # radius [cm]
        z0 =   c12        # z beam start position [cm]
        z1 =   c12        # z beam end position [cm]
       dir =   data
@@ -65,7 +65,7 @@ mat[2]    Ta 1           # Ta foil
 mat[3]    Si 1           # TPX3 detector element
 mat[4]    Al 1           # beam degrader
 mat[5]    Al 1           # TPX3 cover
-mat[6]    Si 1           # ASCI chip
+mat[6]    Si 1           # ASIC chip
 
 [ M a t N a m e C o l o r ]
   mat  name      color
@@ -74,11 +74,11 @@ mat[6]    Si 1           # ASCI chip
   3    TPX3      darkred
   4    Degrader  gray
   5    Cover     black
-  6    ASCI-chip orange
+  6    ASIC-chip orange
   
 [ S u r f a c e ]
-  10  so     500.0
-  11  so     c18
+  10  so     c18
+$  11  so     c18
   14  rpp    -3.8 3.8 -6.1 6.1 0.0 c07
   15  rpp    0.2739 0.2739+c05 -1*c04 c04 -1*c04 c04
   16  rpp    c01-5.0 3.8 -6.1 6.1 c12-2.0 c02+5.0
@@ -92,9 +92,9 @@ mat[6]    Si 1           # ASCI chip
   25  rpp    0.1864 0.1864+c21 -1*c04 c04 -1*c04 c04
 
 [ C e l l ]
- 100    0           -10 #102 #103 #104 #105 #106 #107 #108 #109
+ 100    0           -10  #103 #104 #105 #106 #107 #108 #109
  101   -1            10 #103 #104 #105 #106 #107 #108 #109
- 102    1 -1*c08    -11 #103 #104 #105 #106 #107 #108 #109
+$ 102    1 -1*c08    -11 #103 #104 #105 #106 #107 #108 #109
  103    2 -1*c09    -14
  104    3 -1*c10    -15 trcl=1
  105    1 -1*c08    -16 17 #103 #104 #106 #107 #108 #109
@@ -109,7 +109,7 @@ mat[6]    Si 1           # ASCI chip
   *tr3 c01 0 c02             0 0 0   3 90+c15  2 c03  0 0  3   # T-Deposit
   *tr4 (c01/3)*2 0 (c02/3)*2 0 0 0   2 -c03    0 0    0 0  3   # channel 2
 
-[ I m p o r t a n c e ]
+[ I m p o r t a n c e ]off
      part = all
       reg    imp
       102    0.0

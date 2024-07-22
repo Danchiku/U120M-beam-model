@@ -19,12 +19,11 @@ Aluminium walls around the detector element simulate detector cover. Above the d
 
 `[T-Track]` (Overview) tally is for visualization of the setup and beam geometry. `[T-Track]` (TPX3) tally is to check flux on the detector (there are two addition `[T-Track]` tallies to determine flux between the detector and scatter foil). `[T-Cross]` (Energy spectrum) tally is for determinig energy specrum of the beam in front of the $Ta$ foil and the detector. Main output of the simulation is `[T-Deposit]` and `[T-LET]`, they are for displaying deposited energy $Dose$ and linear energy trasnfer $LET$ in $Si$ detection element of TPX3. 
 
-`[Forced Collisions]` are to improve chances of deflected particles interactions. `[Importance]` is for ignoring the residual beam behind the Ta-foil that will no longer be useful, also it is for run time optimalization. 
+`[Forced Collisions]` are to improve chances of deflected particles interactions. Geometry is designed in a way, that particles that leave the experiment space and are no longer useful enter into the void where they no longer interact. This saves on computation time. 
 
 ## Simulation output
-*work in progress*
 
-These are the simulation outputs for $10^{8}$ particles. It is not enough for a good statistic but I did not have time for longer one *yet*. 
+These are the simulation outputs for $10^{8}$ particles and $100$ batches.  
 
 - Particle flux in $xz$ plane, at position $(0;0)$ is $Ta$ scatter foil, primary beam behind scatter foil is ignored.
 <img src="simulation_output/flux_all.png" width=75% height=75%>
@@ -35,6 +34,9 @@ These are the simulation outputs for $10^{8}$ particles. It is not enough for a 
 - Proton energy spectrum $1$ cm behind the scatter foil. 
 <img src="simulation_output/spectrum_2.png" width=75% height=75%>
 
-- Deposited energy in detector element (since particle flux of scatter protons is low, almost nothing is detected). 
+- Deposited energy in detector element. 
 <img src="simulation_output/deposit_1.png" width=75% height=75%>
+
+- Proton energy spectrum on the detector. 
+<img src="simulation_output/spectrum_2.png" width=75% height=75%>
 

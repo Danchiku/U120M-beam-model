@@ -33,7 +33,7 @@ $ ---------
 [ P a r a m e t e r s ]
  icntl    =           0     # 0: simulation  8: geometry
  maxcas   =           1e8   # number of particles; 1e7 cca 12min, 1e8 cca 2h, 1e9 cca 18h, per batch
- maxbch   =           100     # number of batches
+ maxbch   =           100   # number of batches
  e-mode   =           0     # Normal, 1: Event generator mode
  negs     =           1     # =-1:original, =0:No, =1:EGS
  emin(12) =           1e-03 # needed for track structure mode
@@ -42,7 +42,7 @@ $ ---------
  etsmin   =           1e-6
   
 [ S o u r c e ]
-   s-type =   1         # Gaussian space distribution
+   s-type =   1          # pencil beam source
      proj =   proton     # particle type
    e-type =   2          # Gaussian energy distribution
       eg0 =   c14

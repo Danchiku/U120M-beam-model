@@ -1,0 +1,94 @@
+$OMP=0
+[ T i t l e ]
+Rozptyl
+
+$ VARIABLES
+set: c01[-10]    $ Z[cm] source position
+set: c02[33.0]   $ mean proton energy [MeV]
+set: c03[16.69]  $ density of Ta [g/cm^3]
+set: c04[0.01]   $ foil thickness [cm]
+set: c07[0.01] #[sqrt(1/pi)]    $ 1cm2 source radius [cm]
+set: c08[10]                 $ z-position of t-cross tally [cm]
+
+[ P a r a m e t e r s ]
+ icntl    =           0     # 0: simulation  8: geometry
+ maxcas   =           1e7   # number of particles; 1e7 cca 2min, 1e8 cca 20min, 1e9 cca 200min, per batch
+ maxbch   =           1     # number of batches
+# icxsni   = 0   # elastic scattering: 0: Pearlstein-Niita’s formula, 1: KUROTAMA model, 2: Sato’s formula
+
+[ S o u r c e ]
+   s-type =   1          # pencil beam source
+     proj =   proton     # particle type
+       e0 =   c02        # energy [MeV/u]
+       x0 =   0.0        # x beam position [cm]
+       y0 =   0.0        # y beam position [cm]
+       r0 =   0*c07        # radius [cm]
+       z0 =   c01        # z beam start position [cm]
+       z1 =   c01        # z beam end position [cm]
+      dir =   1.0
+
+[ M a t e r i a l ]
+mat[1]    Ta 1           # Ta foil
+
+[ S u r f a c e ]
+  10  so     -200*c01
+  11  cz     1.0
+  12  pz     0.0
+  13  pz     c04
+
+[ C e l l ]
+ 100    0           -10 #102
+ 101   -1            10 #102
+ 102    1 -1*c03    -11 12 -13 
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+#   r-type =    2            # r-mesh is linear given by rmin, rmax and nr
+#     rmin =   0.0           # minimum value of r-mesh points
+#     rmax =   200*c08      # maximum value of r-mesh points
+#       nr =   1             # number of r-mesh points
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 40 * pi / 180 )}
+	      {c08 * tan( 45 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	        c08              # z position [cm]
+#   a-type =    -2           # a-mesh is linear given by amin, amax and na
+#     amin =   0.0           # minimum value of a-mesh points
+#     amax =   95.0          # maximum value of a-mesh points
+#       na =   19            # number of a-mesh points
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =   r # the           # axis of output (the = angle theta)
+     file = cross.out       # file name of output for the above axis
+     part = proton
+   output = current # flux
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1 # 4            # unit is [...]
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+
+[END]
+
+	      {c08 * tan(  0 * pi / 180 )}
+	      {c08 * tan(  5 * pi / 180 )}
+	      {c08 * tan( 10 * pi / 180 )}
+	      {c08 * tan( 15 * pi / 180 )}
+	      {c08 * tan( 20 * pi / 180 )}
+	      {c08 * tan( 25 * pi / 180 )}
+	      {c08 * tan( 30 * pi / 180 )}
+	      {c08 * tan( 35 * pi / 180 )}
+	      {c08 * tan( 40 * pi / 180 )}
+	      {c08 * tan( 45 * pi / 180 )}
+	      {c08 * tan( 50 * pi / 180 )}
+	      {c08 * tan( 55 * pi / 180 )}
+	      {c08 * tan( 60 * pi / 180 )}
+	      {c08 * tan( 65 * pi / 180 )}
+	      {c08 * tan( 70 * pi / 180 )}
+	      {c08 * tan( 75 * pi / 180 )}
+	      {c08 * tan( 80 * pi / 180 )}
+	      {c08 * tan( 85 * pi / 180 )}
+	      {c08 * 1000.}	   

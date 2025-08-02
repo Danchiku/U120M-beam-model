@@ -1,0 +1,474 @@
+$OMP=0
+[ T i t l e ]
+Scatter test
+
+$ VARIABLES
+set: c01[-10]    $ Z[cm] source position
+set: c02[33.0]   $ mean proton energy [MeV] ---------- change -- 33.0
+set: c03[16.69]  $ density of Ta [g/cm^3]
+set: c11[19.254] $ density of W [g/cm^3]
+set: c12[2.699]  $ density of Al [g/cm^3]
+set: c13[8.935]  $ density of Cu [g/cm^3]
+set: c14[19.283] $ density of Au [g/cm^3]
+set: c15[2.266]  $ density of C [g/cm^3]
+set: c04[0.01]   $ foil thickness [cm]
+set: c08[10]     $ z-position of t-cross tally [cm]
+set: c09[0]      $ start angle [degrees]
+set: c10[5]      $ angle step  [degrees]
+$ ---------
+
+[ P a r a m e t e r s ]
+ icntl    =   0     # 0: simulation  8: geometry
+ maxcas   =   1e8   # number of particles; 1e7 cca 1min, 1e8 cca 10min, per batch
+ maxbch   =   1     # number of batches
+$ icxsni   =   0     # elastic scattering: 0: Pearlstein-Niita’s formula, 1: KUROTAMA model, 2: Sato’s formula
+$ icrhi    =   2     # total cross section nucleus-nucleus: 2: KUROTAMA model, 1: NASA formula, 0: Shen formula
+$ lib(1)   =   00h   # i=1 for proton, 19h = TENDL-19, 00h = TENDL-21, 20h = JENDL-5, 70h = ENDF (no Ta)
+ dmax(1)  =   100   # max energy for protons [MeV]
+
+[ S o u r c e ]
+   s-type =   1          # pencil beam source
+     proj =   proton     # particle type
+       e0 =   c02        # energy [MeV/u]
+       x0 =   0.0        # x beam position [cm]
+       y0 =   0.0        # y beam position [cm]
+       r0 =   0          # radius [cm]
+       z0 =   c01        # z beam start position [cm]
+       z1 =   c01        # z beam end position [cm]
+      dir =   1.0
+
+[ M a t e r i a l ]
+mat[1]    Ta 1           # Ta foil
+mat[2]    W 1            # W foil
+mat[3]    Al 1           # Al foil
+mat[4]    Cu 1           # Cu foil
+mat[5]    Au 1           # Au foil
+mat[6]    C 1            # C foil
+
+[ M a t N a m e C o l o r ]
+  mat  name      color
+  1    Ta-foil   orangeyellow
+  2    W-foil    gray
+  3    Al-foil   black
+  4    Cu-foil   orange
+  5    Au-foil   yellow
+  6    C-foil    red
+
+[ S u r f a c e ]
+  10  so     -200*c01
+  11  cz     1.0
+  12  pz     0.0
+  13  pz     c04
+
+[ C e l l ]
+ 100    0           -10 #102
+ 101   -1            10 #102
+ 102    1 -1*c03    -11 12 -13 
+$ 102    2 -1*c11    -11 12 -13
+$ 102    3 -1*c12    -11 12 -13
+$ 102    4 -1*c13    -11 12 -13
+$ 102    5 -1*c14    -11 12 -13
+$ 102    6 -1*c15    -11 12 -13
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 0 * c10 * pi / 180 )}
+	      {c08 * tan( ( 0 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_01.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 1 * c10 * pi / 180 )}
+	      {c08 * tan( ( 1 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_02.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 2 * c10 * pi / 180 )}
+	      {c08 * tan( ( 2 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_03.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 3 * c10 * pi / 180 )}
+	      {c08 * tan( ( 3 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_04.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 4 * c10 * pi / 180 )}
+	      {c08 * tan( ( 4 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_05.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 5 * c10 * pi / 180 )}
+	      {c08 * tan( ( 5 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_06.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+    
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 6 * c10 * pi / 180 )}
+	      {c08 * tan( ( 6 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_07.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 7 * c10 * pi / 180 )}
+	      {c08 * tan( ( 7 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_08.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 8 * c10 * pi / 180 )}
+	      {c08 * tan( ( 8 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_09.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+
+
+
+
+
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 9 * c10 * pi / 180 )}
+	      {c08 * tan( ( 9 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_10.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 10 * c10 * pi / 180 )}
+	      {c08 * tan( ( 10 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_11.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 11 * c10 * pi / 180 )}
+	      {c08 * tan( ( 11 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_12.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 12 * c10 * pi / 180 )}
+	      {c08 * tan( ( 12 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_13.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 13 * c10 * pi / 180 )}
+	      {c08 * tan( ( 13 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_14.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 14 * c10 * pi / 180 )}
+	      {c08 * tan( ( 14 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_15.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+    
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 15 * c10 * pi / 180 )}
+	      {c08 * tan( ( 15 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_16.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+ 
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 16 * c10 * pi / 180 )}
+	      {c08 * tan( ( 16 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_17.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+
+[ T - C r o s s ]
+    title = Cross in r-z mesh
+     mesh =  r-z            # mesh type is r-z scoring mesh
+   r-type =    1            # r-mesh
+       nr =   1             # number of r-mesh points
+	      {c08 * tan( 17 * c10 * pi / 180 )}
+	      {c08 * tan( ( 17 + 1 ) * c10 * pi / 180 )}
+   z-type =    1            # z-mesh
+       nz =    0            # number of z-mesh points
+	      c08               # z position [cm]
+  2D-type =    3            # 1:Cont, 2:Clust, 3:Color, 4:xyz, 5:mat, 6:Clust+Cont, 7:Col+Cont
+     axis =    r             # axis of output (the = angle theta)
+     file = cross_18.out       # file name of output for the above axis
+     part = proton
+   output = current
+   e-type =    1            # e-mesh is given by the below data
+       ne =    1            # number of e-mesh points
+             0.0  1000.0
+     unit =    1
+   epsout =    2            # (D=0) generate eps file by ANGEL   ; 2: include error bars
+    gshow =    3            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+
+[END]
+

@@ -37,7 +37,7 @@ These are the simulation outputs for $10^{8}$ particles and $100$ batches.
 <img src="simulation_output/foil_spectrum_2.png" width=75% height=75%>
 
 - Deposited energy in detector element. 
-<img src="simulation_output/deposit_det.png" width=75% height=75%>
+<img src="simulation_output/deposit_TPX3.png" width=75% height=75%>
 
 - Proton energy spectrum on the detector. 
 <img src="simulation_output/det_spectrum.png" width=75% height=75%>

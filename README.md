@@ -3,7 +3,9 @@ These are a simulation input parameters for Monte Carlo program [PHITS](https://
 
 Files `bp_model_v1.inp` and `bp_model_v2.inp` are old versions of experiment conducted by C. Granja and his PhD student D. Poklop described in article *Directional-Sensitive Wide Field-of-View Monitoring of High-Intensity Proton Beams by Spectral Tracking of Scattered Particles with Scattering Foil and Miniaturized Radiation Camera* (this article is **not** yet published).  Files `bp_model_v5-1.inp` and `bp_model_v5-sum.inp` are the current versions of the experiment described in the next chapter. `bp_model_v5-1.inp` is the main simulation file that was run 10 times and `bp_model_v5-sum.inp` was used to combine the results. 
 
-File `elastic_scatter_visualization/scatter_model.inp` is for manual output of differential effective cross section to solid angle for proton collision with tantalum. Also provided are Python files that visualize the different models used. 
+File `elastic_scatter_visualization/scatter_model.inp` is for manual output of differential effective cross section to solid angle for proton collision with tantalum. Also provided are Python scripts that visualize the different models used. 
+
+In folder `results_calculation` is a Python script used to calculate the desired result for simulation output files. 
 
 ## Experimental setup
 - proton beam with average energy of $E=33$ MeV ($FWHM = 0.5$ MeV) on the $Ta$ foil,
@@ -13,7 +15,7 @@ File `elastic_scatter_visualization/scatter_model.inp` is for manual output of d
 - $Si$ detection element of [MiniPix TPX3](https://advacam.com/camera/minipix-tpx3/) detector $141$ cm perpendicularly to the beam, $141$ cm parallel to the foil ($200$ cm from scatter foil), perpendicularly to scattered paticles and angled at $60$ degrees to the ceiling. 
 
 ## Simulation
-`$OMP=0` is a command for turning on parallel computing using *OpenMP* with all available processing cores (if you aren't using parallelization then just delete the line). 
+`$OMP=64` is a command for turning on parallel computing using *OpenMP* with 64 cores (if you aren't using parallelization then just delete the line). 
 
 Variables `cXX` can be used to quickly change detection element position, size, resolution and Ta-foil thickness. 
 
@@ -23,9 +25,19 @@ Aluminium walls around the detector element simulate detector cover. Above the d
 
 `[Forced Collisions]` are to improve chances of deflected particles interactions. Geometry is designed in a way, that particles that leave the experiment space and are no longer useful enter into the void where they no longer interact. This saves on computation time. 
 
+`sumtally` section in `bp_model_v5-sum.inp` is used to combine tally results to one. It is used in every tally that you want to combine
+
+## Simulation results
+
+These are the simulation results for $10^{9}$ particles, $30$ batches and $10$ combined output files.  
+
+*in progress*
+
+
+
 ## Simulation output
 
-These are the simulation outputs for $10^{8}$ particles and $100$ batches.  
+These are the simulation outputs for $10^{9}$ particles, $30$ batches and $10$ combined output files.  
 
 - Particle flux in $xz$ plane, at position $(0;0)$ is $Ta$ scatter foil, primary beam behind scatter foil is ignored.
 <img src="simulation_output/track_all.png" width=75% height=75%>
@@ -41,4 +53,3 @@ These are the simulation outputs for $10^{8}$ particles and $100$ batches.
 
 - Proton energy spectrum on the detector. 
 <img src="simulation_output/det_spectrum.png" width=75% height=75%>
-

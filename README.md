@@ -31,6 +31,8 @@ Aluminium walls around the detector element simulate detector cover. Above the d
 
 These are the simulation results for $10^{9}$ particles, $30$ batches and $10$ combined output files calculated by `results_calculation/main.py`. Simulations were also done for two more detector positions: 30 and 60 degrees deviated from the main beam (both were 2 m from the $Ta$ scatter foil). 
 
+These are measured values in the detector normalized to source particles. 
+
 |                                            | 30 degress              | 45 degrees             | 60 degrees             |
 | :---                                       |   ---:                  |   ---:                 |   ---:                 |
 | Flux (1/source)                            | $1,87$ $(6)$ $10^{-7}$  | $2,5$ $(2)$ $10^{-8}$  | $1,3$ $(2)$ $10^{-8}$  |

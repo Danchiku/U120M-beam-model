@@ -1,9 +1,9 @@
 # U-120M proton beam model in PHITS
 These are a simulation input parameters for Monte Carlo program [PHITS](https://phits.jaea.go.jp/). Model is used in my Bachelor thesis **Model description of proton beams** for comparation with the experiment done on [cyclotron U-120M](https://www.ujf.cas.cz/en/departments/department-of-accelerators/cyclotron/) in Řež, Czechia. 
 
-File `bp_model_v1.inp` is the old version of experiment conducted by C. Granja and his PhD student D. Poklop described in article *Directional-Sensitive Wide Field-of-View Monitoring of High-Intensity Proton Beams by Spectral Tracking of Scattered Particles with Scattering Foil and Miniaturized Radiation Camera* (this article is **not** yet published).  File `bp_model_v2.inp` is the current version of the experiment described in the next chapter. 
+Files `bp_model_v1.inp` and `bp_model_v2.inp` are old versions of experiment conducted by C. Granja and his PhD student D. Poklop described in article *Directional-Sensitive Wide Field-of-View Monitoring of High-Intensity Proton Beams by Spectral Tracking of Scattered Particles with Scattering Foil and Miniaturized Radiation Camera* (this article is **not** yet published).  Files `bp_model_v5-1.inp` and `bp_model_v5-sum.inp` are the current versions of the experiment described in the next chapter. `bp_model_v5-1.inp` is the main simulation file that was run 10 times and `bp_model_v5-sum.inp` was used to combine the results. 
 
-File `scatter_model.inp` is for manual output of differential effective cross section to solid angle for proton collision with tantalum. 
+File `elastic_scatter_visualization/scatter_model.inp` is for manual output of differential effective cross section to solid angle for proton collision with tantalum. Also provided are Python files that visualize the different models used. 
 
 ## Experimental setup
 - proton beam with average energy of $E=33$ MeV ($FWHM = 0.5$ MeV) on the $Ta$ foil,

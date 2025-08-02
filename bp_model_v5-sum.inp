@@ -1,0 +1,450 @@
+$OMP=8
+[ T i t l e ]
+Model for Timepix
+
+$ VARIABLES
+set: c01[-141]   $ X[cm] offset of TPX3  $ ---- 141 cm ----
+set: c02[141]    $ Z[cm] offset of TPX3
+set: c03[45]     $ rotation around Y [degrees] of TPX3
+set: c15[60]     $ rotation up TPX3 [degrees]
+
+set: c04[0.704]  $ half of TPX3 size [cm]
+set: c05[0.05]   $ TPX3 thickness [cm]
+set: c06[256]    $ number of pixels in matrix (X*X) of TPX3
+set: c07[0.0100] $ thickness of Ta-foil [cm]
+set: c16[0.70]   $ half of thickness of Al box [cm]
+set: c17[1.05]   $ half of Al box size [cm]
+set: c19[0.85]   $ half of Al inside [cm]
+set: c20[0.0001] $ cover plate TPX3 [cm]
+set: c21[0.085]  $ ASIC chip thickness [cm]
+
+set: c08[0.0012] $ density of air [g/cm^3]
+set: c09[16.69]  $ density of Ta [g/cm^3]
+set: c10[2.329]  $ density of Si [g/cm^3]
+
+set: c11[0.0055] $ thickness of Al beam degrader [cm]
+set: c12[-56.0]  $ nozzle position [cm]
+set: c13[2.7]    $ density of Al [g/cm^3]
+
+set: c14[33.0]   $ mean proton energy [MeV], should be 33 at the foil
+set: c18[210.0]  $ simulation volume size [cm]
+$ ---------
+
+[ P a r a m e t e r s ]
+ icntl    =           13    # 0: simulation  8: geometry, 13: for sumtally
+ maxcas   =           100   # number of particles; 1e7 cca 7min, 1e8 cca 1h, 1e9 cca 12h, per batch per 8 cores
+ maxbch   =           1     # number of batches
+ e-mode   =           0     # Normal, 1: Event generator mode
+ negs     =           1     # =-1:original, =0:No, =1:EGS
+ lib(1)   =           20h   # i=1 for proton, 19h = TENDL-19, 00h = TENDL-21, 20h = JENDL-5, 70h = ENDF (no Ta)
+ rseed    =           0     # 0: random, !=0: set seed
+$ dmax(1)  =   100   # max energy for protons [MeV]
+  
+[ S o u r c e ]
+   s-type =   1          # Gaussian space distribution
+     proj =   proton     # particle type
+   e-type =   2          # Gaussian energy distribution
+      eg0 =   c14
+      eg1 =   0.5        # energy FWHM [MeV/u]
+      eg2 =   c14-3      # min cutoff
+      eg3 =   c14+3      # max cutoff
+       x0 =   0.0        # x beam position [cm]
+       y0 =   0.0        # y beam position [cm]
+       r0 =   1.5        # radius [cm]
+       z0 =   c12        # z beam start position [cm]
+       z1 =   c12        # z beam end position [cm]
+      dir =   data
+   a-type =   11         # angular distribution
+       na =   10         # number of data bins
+  0.0 0.7979 0.2 0.7365 0.4 0.5794 0.6 0.3884 0.8 0.2218 1.0 0.1080 1.2 0.0448 1.4 0.0158 1.6 0.0048 1.8 0.0012 2.0
+
+[ M a t e r i a l ]
+mat[1]    N 8  O 2       # air composition
+mat[2]    Ta 1           # Ta foil
+mat[3]    Si 1           # TPX3 detector element
+mat[4]    Al 1           # beam degrader
+mat[5]    Al 1           # TPX3 cover
+mat[6]    Si 1           # ASIC chip
+
+[ M a t N a m e C o l o r ]
+  mat  name      color
+  1    Air       pastelcyan
+  2    Ta-foil   orangeyellow
+  3    TPX3      darkred
+  4    Degrader  gray
+  5    Cover     black
+  6    ASCI-chip orange
+  
+[ S u r f a c e ]
+  10  so     c18
+  14  rpp    -3.8 3.8 -6.1 6.1 0.0 c07
+  15  rpp    0.2739 0.2739+c05 -1*c04 c04 -1*c04 c04
+  16  rpp    c01-5.0 3.8 -6.1 6.1 c12-2.0 c02+5.0
+  17  rpp    -3.8 3.8 -6.1 6.1 10.0 c02+5.0
+  19  cz     2.5
+  20  pz     c12+0.1
+  21  pz     c12+0.1+c11
+  22  rpp    -c16 c16 -c17 c17 -c17 c17
+  23  rpp    -c16 c16 -c19 c19 -c19 c19
+  24  rpp    0.2739+c05 0.2739+c05+c20 -1*c04 c04 -1*c04 c04
+  25  rpp    0.1864 0.1864+c21 -1*c04 c04 -1*c04 c04
+
+[ C e l l ]
+ 100    0           -10  #103 #104 #105 #106 #107 #108 #109  $ Vacuum
+ 101   -1            10                                      $ Void
+ 103    2 -1*c09    -14                                      $ Ta scatter foil
+ 104    3 -1*c10    -15     trcl=1                           $ Si detector
+ 105    1 -1*c08    -16 17  #103 #104 #106 #107 #108 #109    $ air
+ 106    4 -1*c13    -19 20 -21                               $ Al nozzle foil
+ 107    5 -1*c13    -22 23  trcl=1                           $ Al housing
+ 108    5 -1*c13    -24     trcl=1                           $ Al detector cover
+ 109    6 -1*c10    -25     trcl=1                           $ ASIC chip
+
+[ T r a n s f o r m ]
+  *tr1 c01 0 c02             0 0 0   3 c15     2 c03  0 0  3   # TPX3, cover, T-Track
+  *tr2 c01/3 0 c02/3         0 0 0   2 -c03    0 0    0 0  3   # channel 1
+  *tr3 c01 0 c02             0 0 0   3 90+c15  2 c03  0 0  3   # T-Deposit
+  *tr4 (c01/3)*2 0 (c02/3)*2 0 0 0   2 -c03    0 0    0 0  3   # channel 2
+
+[ F o r c e d C o l l i s i o n s ]
+     part = proton
+      reg    fcl
+      104    1.0
+
+[ T - D e p o s i t ]
+    title = Energy deposition in TPX3
+     mesh =    xyz          # mesh type
+   x-type =    2            # x-mesh linear
+     xmin =   -1*c04
+     xmax =    c04
+       nx =    c06
+   y-type =    1            # y-mesh data
+       ny =    1
+       -0.2739-c05 -0.2739  # y range
+   z-type =    2            # z-mesh linear
+     zmin =   -1*c04
+     zmax =    c04
+       nz =    c06
+     unit =    2            # unit [MeV/source]
+ material =    all
+   output =    dose         # total deposited energy
+     axis =    xz           # axis of output
+     trcl =    3
+     file = deposit_TPX3.out    # file name
+     part =    all proton alpha (electron positron)    # p4-group = e-/+
+    gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   vtkout =    1
+   epsout =    1            # (D=0) generate eps file by ANGEL
+sumtally start
+isumtally = 1               #(D=1) sumtally option, 1:integration, 2:weighted average
+nfile = 10                  # number of tally files
+ ./01/1_deposit_TPX3.out  1.0
+ ./02/2_deposit_TPX3.out  1.0
+ ./03/3_deposit_TPX3.out  1.0
+ ./04/4_deposit_TPX3.out  1.0
+ ./05/5_deposit_TPX3.out  1.0
+ ./06/6_deposit_TPX3.out  1.0
+ ./07/7_deposit_TPX3.out  1.0
+ ./08/8_deposit_TPX3.out  1.0
+ ./09/9_deposit_TPX3.out  1.0
+ ./10/10_deposit_TPX3.out  1.0
+sfile = deposit_TPX3_sum10_deg45.out    # file name of output by sumtally option
+sumfactor = 1.0             # (D=1.0) normalization factor
+sumtally end
+
+[ T - L E T ]
+    title = LET in TPX3
+     mesh =    xyz          # mesh type
+   x-type =    2            # x-mesh linear
+     xmin =   -1*c04
+     xmax =    c04
+       nx =    c06
+   y-type =    1            # y-mesh data
+       ny =    1
+       -0.2739-c05 -0.2739  # y range
+   z-type =    2            # z-mesh linear
+     zmin =   -1*c04
+     zmax =    c04
+       nz =    c06
+   l-type =    3            # l-mesh is log given by lmin, lmax and nl
+     lmin =    1.0e-04      # minimum value of l-mesh points
+     lmax =    1.0e04       # maximum value of l-mesh points
+       nl =    4            # number of l-mesh points
+     unit =    6            # unit is L*d(L) [keV/um]
+     axis =    xz           # axis of output
+     trcl =    3
+     file = let_TPX3.out    # file name
+     part =    all
+    gshow =    1
+   epsout =    1
+sumtally start
+isumtally = 1               #(D=1) sumtally option, 1:integration, 2:weighted average
+nfile = 10                  # number of tally files
+ ./01/1_let_TPX3.out  1.0
+ ./02/2_let_TPX3.out  1.0
+ ./03/3_let_TPX3.out  1.0
+ ./04/4_let_TPX3.out  1.0
+ ./05/5_let_TPX3.out  1.0
+ ./06/6_let_TPX3.out  1.0
+ ./07/7_let_TPX3.out  1.0
+ ./08/8_let_TPX3.out  1.0
+ ./09/9_let_TPX3.out  1.0
+ ./10/10_let_TPX3.out  1.0
+sfile = let_TPX3_sum10_deg45.out    # file name of output by sumtally option
+sumfactor = 1.0             # (D=1.0) normalization factor
+sumtally end
+
+[ T - T r a c k ]
+    title = T-Track overview
+     mesh =    xyz          # mesh type
+   x-type =    2            # x-mesh linear
+     xmin =    c01-5.0
+     xmax =    3.8
+       nx =    200          # number of x-mesh points
+   y-type =    1            # y-mesh data
+       ny =    1
+       -5.0  5.0            # y range
+   z-type =    2            # z-mesh linear
+     zmin =    c12-2.0
+     zmax =    c02+5.0
+       nz =    200          # number of z-mesh points
+     part =    all
+   e-type =    1            # e-mesh data
+       ne =    1            # number of e-mesh points
+        0.0  10000.0
+     unit =    1            # unit [1/cm^2/source]
+     axis =    xz           # axis of output
+     file = xz_track_all.out    # file name
+    gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   vtkout =    1
+   epsout =    1            # (D=0) generate eps file by ANGEL
+sumtally start
+isumtally = 1               #(D=1) sumtally option, 1:integration, 2:weighted average
+nfile = 10                  # number of tally files
+ ./01/1_xz_track_all.out  1.0
+ ./02/2_xz_track_all.out  1.0
+ ./03/3_xz_track_all.out  1.0
+ ./04/4_xz_track_all.out  1.0
+ ./05/5_xz_track_all.out  1.0
+ ./06/6_xz_track_all.out  1.0
+ ./07/7_xz_track_all.out  1.0
+ ./08/8_xz_track_all.out  1.0
+ ./09/9_xz_track_all.out  1.0
+ ./10/10_xz_track_all.out  1.0
+sfile = xz_track_all_sum10_deg45.out    # file name of output by sumtally option
+sumfactor = 1.0             # (D=1.0) normalization factor
+sumtally end
+
+[ T - T r a c k ]
+    title = T-Track of TPX3
+     mesh =    xyz          # mesh type
+   x-type =    1            # x-mesh
+       nx =    1
+       0.2739 0.2739+c05
+   y-type =    2            # y-mesh linear
+     ymin =   -2.0
+     ymax =    2.0
+       ny =    200          # number of y-mesh points
+   z-type =    2            # y-mesh data
+     zmin =   -2.0
+     zmax =    2.0
+       nz =    200          # number of z-mesh points
+     part =    all
+   e-type =    1            # e-mesh data
+       ne =    1            # number of e-mesh points
+        0.0  10000.0
+     unit =    1            # unit [1/cm^2/source]
+     axis =    yz           # axis of output
+     trcl =    1
+     file = xy_track_TPX3.out    # file name
+    gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   epsout =    1            # (D=0) generate eps file by ANGEL
+sumtally start
+isumtally = 1               #(D=1) sumtally option, 1:integration, 2:weighted average
+nfile = 10                  # number of tally files
+ ./01/1_xy_track_TPX3.out  1.0
+ ./02/2_xy_track_TPX3.out  1.0
+ ./03/3_xy_track_TPX3.out  1.0
+ ./04/4_xy_track_TPX3.out  1.0
+ ./05/5_xy_track_TPX3.out  1.0
+ ./06/6_xy_track_TPX3.out  1.0
+ ./07/7_xy_track_TPX3.out  1.0
+ ./08/8_xy_track_TPX3.out  1.0
+ ./09/9_xy_track_TPX3.out  1.0
+ ./10/10_xy_track_TPX3.out  1.0
+sfile = xy_track_TPX3_sum10_deg45.out    # file name of output by sumtally option
+sumfactor = 1.0             # (D=1.0) normalization factor
+sumtally end
+
+[ T - C r o s s ]
+    title = Energy spectrum: Ta-foil
+$ in front and behind the Ta-foil
+     mesh =    xyz          # mesh type
+   x-type =    2            # x-mesh linear
+     xmin =   -2.5
+     xmax =    2.5
+       nx =    1            # number of x-mesh points
+   y-type =    2            # z-mesh linear
+     ymin =   -2.5
+     ymax =    2.5
+       ny =    1            # number of y-mesh points
+   z-type =    2            # z-mesh data
+     zmin =   -1.0
+     zmax =    1.0
+       nz =    1            # number of z-mesh points
+     part =    proton
+   e-type =    2            # e-mesh data, linear
+     emin =    1.0
+     emax =    40.0
+       ne =    100          # number of e-mesh points
+     unit =    2            # unit [1/cm^2/MeV/source]
+     axis =    eng          # axis of output
+     file = xy_cross_en_spectrum.out    # file name
+   output = flux
+    gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   epsout =    1            # (D=0) generate eps file by ANGEL
+sumtally start
+isumtally = 1               #(D=1) sumtally option, 1:integration, 2:weighted average
+nfile = 10                  # number of tally files
+ ./01/1_xy_cross_en_spectrum.out  1.0
+ ./02/2_xy_cross_en_spectrum.out  1.0
+ ./03/3_xy_cross_en_spectrum.out  1.0
+ ./04/4_xy_cross_en_spectrum.out  1.0
+ ./05/5_xy_cross_en_spectrum.out  1.0
+ ./06/6_xy_cross_en_spectrum.out  1.0
+ ./07/7_xy_cross_en_spectrum.out  1.0
+ ./08/8_xy_cross_en_spectrum.out  1.0
+ ./09/9_xy_cross_en_spectrum.out  1.0
+ ./10/10_xy_cross_en_spectrum.out  1.0
+sfile = xy_cross_en_spectrum_sum10_deg45.out    # file name of output by sumtally option
+sumfactor = 1.0             # (D=1.0) normalization factor
+sumtally end
+
+[ T - T r a c k ]
+    title = T-Track between Ta-foil and TPX3, n. 1
+     mesh =    xyz          # mesh type
+   x-type =    2            # x-mesh linear
+     xmin =   -2.0
+     xmax =    2.0
+       nx =    200
+   y-type =    2            # z-mesh linear
+     ymin =   -2.0
+     ymax =    2.0
+       ny =    200          # number of z-mesh points
+   z-type =    1            # z-mesh data
+       nz =    1
+       0.0 1.0
+     part =    all
+   e-type =    1            # e-mesh data
+       ne =    1            # number of e-mesh points
+        0.0  10000.0
+     unit =    1            # unit [1/cm^2/source]
+     axis =    xy           # axis of output
+     trcl =    2
+     file = xy_track_bet_1.out    # file name
+    gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   epsout =    1            # (D=0) generate eps file by ANGEL
+sumtally start
+isumtally = 1               #(D=1) sumtally option, 1:integration, 2:weighted average
+nfile = 10                  # number of tally files
+ ./01/1_xy_track_bet_1.out  1.0
+ ./02/2_xy_track_bet_1.out  1.0
+ ./03/3_xy_track_bet_1.out  1.0
+ ./04/4_xy_track_bet_1.out  1.0
+ ./05/5_xy_track_bet_1.out  1.0
+ ./06/6_xy_track_bet_1.out  1.0
+ ./07/7_xy_track_bet_1.out  1.0
+ ./08/8_xy_track_bet_1.out  1.0
+ ./09/9_xy_track_bet_1.out  1.0
+ ./10/10_xy_track_bet_1.out  1.0
+sfile = xy_track_bet_1_sum10_deg45.out    # file name of output by sumtally option
+sumfactor = 1.0             # (D=1.0) normalization factor
+sumtally end
+
+[ T - T r a c k ]
+    title = T-Track between Ta-foil and TPX3, n. 2
+     mesh =    xyz          # mesh type
+   x-type =    2            # x-mesh linear
+     xmin =   -2.0
+     xmax =    2.0
+       nx =    200
+   y-type =    2            # z-mesh linear
+     ymin =   -2.0
+     ymax =    2.0
+       ny =    200          # number of z-mesh points
+   z-type =    1            # z-mesh data
+       nz =    1
+       0.0 1.0
+     part =    all
+   e-type =    1            # e-mesh data
+       ne =    1            # number of e-mesh points
+        0.0  10000.0
+     unit =    1            # unit [1/cm^2/source]
+     axis =    xy           # axis of output
+     trcl =    4
+     file = xy_track_bet_2.out    # file name
+    gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   epsout =    1            # (D=0) generate eps file by ANGEL
+sumtally start
+isumtally = 1               #(D=1) sumtally option, 1:integration, 2:weighted average
+nfile = 10                  # number of tally files
+ ./01/1_xy_track_bet_2.out  1.0
+ ./02/2_xy_track_bet_2.out  1.0
+ ./03/3_xy_track_bet_2.out  1.0
+ ./04/4_xy_track_bet_2.out  1.0
+ ./05/5_xy_track_bet_2.out  1.0
+ ./06/6_xy_track_bet_2.out  1.0
+ ./07/7_xy_track_bet_2.out  1.0
+ ./08/8_xy_track_bet_2.out  1.0
+ ./09/9_xy_track_bet_2.out  1.0
+ ./10/10_xy_track_bet_2.out  1.0
+sfile = xy_track_bet_2_sum10_deg45.out    # file name of output by sumtally option
+sumfactor = 1.0             # (D=1.0) normalization factor
+sumtally end
+
+[ T - C r o s s ]
+    title = Energy spectrum: TPX3
+$ in front and behind the detector
+     mesh =    xyz          # mesh type
+   x-type =    2            # x-mesh linear
+     xmin =   -c16
+     xmax =    c16
+       nx =    1            # number of x-mesh points
+   y-type =    2            # z-mesh linear
+     ymin =   -2.0
+     ymax =    2.0
+       ny =    1            # number of y-mesh points
+   z-type =    2            # z-mesh data
+     zmin =   -2.0
+     zmax =    2.0
+       nz =    1            # number of z-mesh points
+     part =    proton
+   e-type =    2            # e-mesh data, linear
+     emin =    1.0
+     emax =    40.0
+       ne =    100          # number of e-mesh points
+     unit =    2            # unit [1/cm^2/MeV/source]
+     axis =    eng          # axis of output
+     trcl =    1
+     file = xy_cross_en_spect_TPX3.out    # file name
+   output = flux
+    gshow =    1            # 0: no 1:bnd, 2:bnd+mat, 3:bnd+reg 4:bnd+lat
+   epsout =    1            # (D=0) generate eps file by ANGEL
+sumtally start
+isumtally = 1               #(D=1) sumtally option, 1:integration, 2:weighted average
+nfile = 10                  # number of tally files
+ ./01/1_xy_cross_en_spect_TPX3.out  1.0
+ ./02/2_xy_cross_en_spect_TPX3.out  1.0
+ ./03/3_xy_cross_en_spect_TPX3.out  1.0
+ ./04/4_xy_cross_en_spect_TPX3.out  1.0
+ ./05/5_xy_cross_en_spect_TPX3.out  1.0
+ ./06/6_xy_cross_en_spect_TPX3.out  1.0
+ ./07/7_xy_cross_en_spect_TPX3.out  1.0
+ ./08/8_xy_cross_en_spect_TPX3.out  1.0
+ ./09/9_xy_cross_en_spect_TPX3.out  1.0
+ ./10/10_xy_cross_en_spect_TPX3.out  1.0
+sfile = xy_cross_en_spect_TPX3_sum10_deg45.out    # file name of output by sumtally option
+sumfactor = 1.0             # (D=1.0) normalization factor
+sumtally end
+
+[ E n d ]

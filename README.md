@@ -33,11 +33,11 @@ These are the simulation results for $10^{9}$ particles, $30$ batches and $10$ c
 
 These are measured values in the detector normalized to source particles. 
 
-|                                            | 30 degress              | 45 degrees             | 60 degrees             |
-| :---                                       |   ---:                  |   ---:                 |   ---:                 |
-| Flux (1/source)                            | $1,87$ $(6)$ $10^{-7}$  | $2,5$ $(2)$ $10^{-8}$  | $1,3$ $(2)$ $10^{-8}$  |
-| Deposited energy (MeV/source)              | $1,800$ $(5)$ $10^{-7}$ | $2,57$ $(2)$ $10^{-8}$ | $1,12$ $(2)$ $10^{-8}$ |
-| Deposited energy from protons (MeV/source) | $1,800$ $(5)$ $10^{-7}$ | $2,54$ $(2)$ $10^{-8}$ | $1,11$ $(2)$ $10^{-8}$ |
+|                                            | 30 degress                      | 45 degrees                     | 60 degrees                     |
+| :---                                       |   ---:                          |   ---:                         |   ---:                         |
+| Flux (1/source)                            | $1,87$ $(6)$ $\cdot$ $10^{-7}$  | $2,5$ $(2)$ $\cdot$ $10^{-8}$  | $1,3$ $(2)$ $\cdot$ $10^{-8}$  |
+| Deposited energy (MeV/source)              | $1,800$ $(5)$ $\cdot$ $10^{-7}$ | $2,57$ $(2)$ $\cdot$ $10^{-8}$ | $1,12$ $(2)$ $\cdot$ $10^{-8}$ |
+| Deposited energy from protons (MeV/source) | $1,800$ $(5)$ $\cdot$ $10^{-7}$ | $2,54$ $(2)$ $\cdot$ $10^{-8}$ | $1,11$ $(2)$ $\cdot$ $10^{-8}$ |
 
 
 ## Simulation output
